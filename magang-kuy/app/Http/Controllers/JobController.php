@@ -39,8 +39,7 @@ class JobController extends Controller
             $job = Job::findOrFail($id);
             $gambar = $request->file('company_logo')->getClientOriginalName();
 
-            $generateNum = random_int(1, 1000);
-            $newName = "$generateNum.$request->name.$gambar";
+            $newName = "$request->name.$gambar";
 
             $request->file('company_logo')->move('storage/job', $newName);
 
