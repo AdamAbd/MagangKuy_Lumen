@@ -19,6 +19,8 @@ class User extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('picture_path')->default('storage/default/photo1.png');
+            $table->string('goal');
 
             $table->timestamps();
         });

@@ -44,7 +44,7 @@ class UserController extends Controller
                 // Hash password from request
                 $user->password = app('hash')->make($request->password);
                 $user->goal = $request->goal;
-                
+
                 if ($user->save()) {
                     // If the user is saved then all requests will continue to login
                     return $this->login($request);
@@ -90,6 +90,7 @@ class UserController extends Controller
 
         // All the credentials to be provided
         $credentials = request(['email', 'password']);
+        $token = auth()->setTTL(7200)->attempt($credentials);
 
         // If credential is null this code will give error massage
         if (!$token = auth()->attempt($credentials)) {
@@ -100,13 +101,12 @@ class UserController extends Controller
         $user = User::where('email', $email)->first();
 
         // Then return with token and the user [the passwrod will be hidden]
-        return $this->respondWithToken($token, $user);
+        return $this->respondWithToken($token, $user, $credentials);
     }
 
     public function me()
     {
-        // Get user data by token then refresh the token
-        return $this->respondWithToken(auth()->refresh(), auth()->user());
+        return response()->json(auth()->user());
     }
 
     public function update(Request $request)
@@ -125,7 +125,7 @@ class UserController extends Controller
 
                 if ($userData->save()) {
                     $data = User::where('id', $user->id)->first();
-                    return $this->respondWithToken(auth()->refresh(), $data);
+                    return response()->json($data);
                 }
             } catch (\Throwable $e) {
                 return response()->json($e->getMessage());
@@ -143,7 +143,7 @@ class UserController extends Controller
 
                 if ($userData->save()) {
                     $data = User::where('id', $user->id)->first();
-                    return $this->respondWithToken(auth()->refresh(), $data);
+                    return response()->json($data);
                 }
             } catch (\Throwable $e) {
                 return response()->json($e->getMessage());
@@ -164,7 +164,7 @@ class UserController extends Controller
 
                 if ($userData->save()) {
                     $data = User::where('id', $user->id)->first();
-                    return $this->respondWithToken(auth()->refresh(), $data);
+                    return response()->json($data);
                 }
             } catch (\Throwable $e) {
                 return response()->json($e->getMessage());
@@ -199,7 +199,7 @@ class UserController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => $user
+            'email' => $user->email
         ]);
     }
 }
