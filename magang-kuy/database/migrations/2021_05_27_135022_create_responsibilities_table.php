@@ -18,8 +18,6 @@ class CreateResponsibilitiesTable extends Migration
 
             $table->string('name');
             $table->string('job_id');
-
-            $table->timestamps();
         });
     }
 
