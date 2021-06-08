@@ -9,7 +9,7 @@ class JobController extends Controller
 {
     public function index()
     {
-        $data = Job::with(['about', 'qualification', 'responsibility'])->get();
+        $data = Job::with(['qualifications', 'responsibilities'])->get();
 
         return response()->json($data);
     }

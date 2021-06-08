@@ -12,17 +12,12 @@ class Job extends Model
         'location', 'about', 'qualifications', 'responsibilities',
     ];
 
-    public function about()
-    {
-        return $this->hasMany(About::class, 'job_id', 'id');
-    }
-
-    public function qualification()
+    public function qualifications()
     {
         return $this->hasMany(Qualification::class, 'job_id', 'id');
     }
 
-    public function responsibility()
+    public function responsibilities()
     {
         return $this->hasMany(Responsibility::class, 'job_id', 'id');
     }
